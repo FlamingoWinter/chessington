@@ -17,14 +17,14 @@ export default class Square {
     }
 
     public getSquaresInRankAndFile() {
-        let moves = [];
+        let squares = [];
         for (let i = 0; i < 8; i++) {
-            moves.push(new Square(i, this.col));
-            moves.push(new Square(this.row, i));
+            squares.push(new Square(i, this.col));
+            squares.push(new Square(this.row, i));
         }
         // Remove piece position from moves
-        moves = moves.filter((square) => (square.row != this.row) || (square.col != this.col));
-        return moves;
+        squares = squares.filter((square) => (square.row != this.row) || (square.col != this.col));
+        return squares;
     }
 
     public toString() {
