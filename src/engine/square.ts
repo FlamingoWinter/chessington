@@ -1,4 +1,3 @@
-
 export default class Square {
     public row: number;
     public col: number;
@@ -14,6 +13,10 @@ export default class Square {
 
     public equals(otherSquare: Square) {
         return !!otherSquare && this.row === otherSquare.row && this.col === otherSquare.col;
+    }
+
+    public notEquals(otherSquare: Square) {
+        return !this.equals(otherSquare);
     }
 
     public getSquaresInRankAndFile() {
