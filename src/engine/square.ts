@@ -1,4 +1,3 @@
-import Board from "./board";
 
 export default class Square {
     public row: number;
