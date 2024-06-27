@@ -3,7 +3,6 @@ import GameSettings from './gameSettings';
 import Square from './square';
 import Piece from './pieces/piece';
 import Offset from "./offset";
-import player from "./player";
 import King from "./pieces/king";
 
 export default class Board {
