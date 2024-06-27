@@ -3,6 +3,8 @@ import GameSettings from './gameSettings';
 import Square from './square';
 import Piece from './pieces/piece';
 import Offset from "./offset";
+import King from "./pieces/king";
+import gameSettings from "./gameSettings";
 
 export default class Board {
     public currentPlayer: Player;
@@ -49,13 +51,36 @@ export default class Board {
         return board;
     }
 
-    public squaresReachableInDirection(square: Square, direction : Offset){
+    private inBounds(square:Square) {
+        return square.row < gameSettings.BOARD_SIZE && square.col < gameSettings.BOARD_SIZE && square.row >= 0 && square.col >= 0
+    }
+
+    public offsetSquareAndCheckBounds(square:Square, offset:Offset):Square | null{
+        const offsetSquare = square.offset(offset);
+        if(this.inBounds(offsetSquare)){
+            return offsetSquare;
+        }
+        return null;
+    }
+
+    public enemyPieceIsOn(square : Square):boolean {
+        return this.getPiece(square)?.player != this.currentPlayer;
+    }
+
+    public squaresReachableInDirection(square: Square, offset : Offset){
         let squares:Square[] = [];
-        let nextSquare = square.squareAtOffset(direction);
+        let nextSquare = this.offsetSquareAndCheckBounds(square,offset);
         while(nextSquare && !this.getPiece(nextSquare)){
             squares.push(nextSquare);
-            nextSquare = nextSquare.squareAtOffset(direction);
+            nextSquare = this.offsetSquareAndCheckBounds(nextSquare,offset);
         }
+
+        if(nextSquare && this.enemyPieceIsOn(nextSquare)){
+            if(!(this.getPiece(nextSquare) instanceof King)){
+                squares.push(nextSquare);
+            }
+        }
+
         return squares;
     }
 
@@ -83,6 +108,24 @@ export default class Board {
         let squares: Square[] = [];
         for (const offset of offsets) {
             squares = squares.concat(this.squaresReachableInDirection(square, offset));
+        }
+        return squares;
+    }
+
+    public squaresReachableWithOffsets(square: Square, offsets: Offset[]): Square[] {
+        let squares: Square[] = [];
+        for (let offset of offsets){
+            const newSquare = this.offsetSquareAndCheckBounds(square, offset);
+            if (newSquare) {
+                if(this.getPiece(newSquare)){
+                    if(this.enemyPieceIsOn(newSquare) && !(this.getPiece(newSquare) instanceof King)) {
+                        squares.push(newSquare);
+                    }
+                }
+                else{
+                    squares.push(newSquare);
+                }
+            }
         }
         return squares;
     }
