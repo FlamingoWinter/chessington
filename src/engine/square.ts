@@ -1,4 +1,3 @@
-import gameSettings from "./gameSettings";
 import Offset from "./offset";
 
 export default class Square {
