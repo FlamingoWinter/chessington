@@ -15,7 +15,6 @@ export default class Piece {
     }
 
 
-
     public moveTo(board: Board, newSquare: Square) {
         const currentSquare = board.findPiece(this);
         board.movePiece(currentSquare, newSquare);
