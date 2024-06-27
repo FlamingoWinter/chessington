@@ -3,6 +3,8 @@ import GameSettings from './gameSettings';
 import Square from './square';
 import Piece from './pieces/piece';
 import Offset from "./offset";
+import player from "./player";
+import King from "./pieces/king";
 
 export default class Board {
     public currentPlayer: Player;
@@ -49,6 +51,10 @@ export default class Board {
         return board;
     }
 
+    private enemyPieceIsOn(square : Square):boolean {
+        return this.getPiece(square)?.player != this.currentPlayer;
+    }
+
     public squaresReachableInDirection(square: Square, direction : Offset){
         let squares:Square[] = [];
         let nextSquare = square.squareAtOffset(direction);
@@ -56,6 +62,13 @@ export default class Board {
             squares.push(nextSquare);
             nextSquare = nextSquare.squareAtOffset(direction);
         }
+
+        if(nextSquare && this.enemyPieceIsOn(nextSquare)){
+            if(!(this.getPiece(nextSquare) instanceof King)){
+                squares.push(nextSquare);
+            }
+        }
+
         return squares;
     }
 
