@@ -9,6 +9,6 @@ export default class Queen extends Piece {
 
     public getAvailableMoves(board: Board) {
         const currentSquare = board.findPiece(this);
-        return currentSquare.getDiagonalSquares().concat(currentSquare.getSquaresInRankAndFile());
+        return board.squaresReachableDiagonally(currentSquare).concat(board.squaresReachableLaterally(currentSquare));
     }
 }

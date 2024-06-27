@@ -2,6 +2,7 @@ import Player from './player';
 import GameSettings from './gameSettings';
 import Square from './square';
 import Piece from './pieces/piece';
+import Offset from "./offset";
 
 export default class Board {
     public currentPlayer: Player;
@@ -46,5 +47,43 @@ export default class Board {
             board[i] = new Array(GameSettings.BOARD_SIZE);
         }
         return board;
+    }
+
+    public squaresReachableInDirection(square: Square, direction : Offset){
+        let squares:Square[] = [];
+        let nextSquare = square.squareAtOffset(direction);
+        while(nextSquare && !this.getPiece(nextSquare)){
+            squares.push(nextSquare);
+            nextSquare = nextSquare.squareAtOffset(direction);
+        }
+        return squares;
+    }
+
+    public squaresReachableLaterally(square:Square) {
+        const offsets : Offset[] = [
+            Offset.north(),
+            Offset.south(),
+            Offset.east(),
+            Offset.west(),
+        ]
+        let squares: Square[] = [];
+        for (const offset of offsets) {
+            squares = squares.concat(this.squaresReachableInDirection(square, offset));
+        }
+        return squares;
+    }
+
+    public squaresReachableDiagonally(square: Square) {
+        const offsets : Offset[] = [
+            Offset.northeast(),
+            Offset.southeast(),
+            Offset.northwest(),
+            Offset.southwest(),
+        ]
+        let squares: Square[] = [];
+        for (const offset of offsets) {
+            squares = squares.concat(this.squaresReachableInDirection(square, offset));
+        }
+        return squares;
     }
 }

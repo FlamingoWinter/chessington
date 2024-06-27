@@ -12,7 +12,7 @@ export default class Knight extends Piece {
     public getAvailableMoves(board: Board) {
         const currentSquare = board.findPiece(this);
         let moves = [];
-        let directions = [
+        let offsets = [
             new Offset(2,1),
             new Offset(1,2),
             new Offset(-2,1),
@@ -22,8 +22,12 @@ export default class Knight extends Piece {
             new Offset(-2,-1),
             new Offset(-1,-2),
         ]
-        for(const direction of directions){
-            moves.push(currentSquare.squareAtOffset(direction));
+        for(let offset of offsets){
+            const newSquare = currentSquare.squareAtOffset(offset);
+            if (newSquare) {
+                moves.push(currentSquare.squareAtOffset(offset));
+            }
+
         }
 
         return moves;

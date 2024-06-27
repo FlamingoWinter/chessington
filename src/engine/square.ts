@@ -20,18 +20,10 @@ export default class Square {
         if(newSquare.inBounds()){
             return newSquare;
         }
-        return null;
+        return undefined;
     }
     
-    public squaresReachableInDirection(direction : Offset){
-        let squares:Square[] = [];
-        let nextSquare = this.squareAtOffset(direction);
-        while(nextSquare){
-            squares.push(nextSquare);
-            nextSquare = nextSquare.squareAtOffset(direction);
-        }
-        return squares;
-    }
+
 
     public equals(otherSquare: Square) {
         return !!otherSquare && this.row === otherSquare.row && this.col === otherSquare.col;
@@ -45,33 +37,6 @@ export default class Square {
         return this.row < gameSettings.BOARD_SIZE && this.col < gameSettings.BOARD_SIZE && this.row >= 0 && this.col >= 0
     }
 
-    public getSquaresInRankAndFile() {
-        const offsets : Offset[] = [
-            Offset.north(),
-            Offset.south(),
-            Offset.east(),
-            Offset.west(),
-        ]
-        let squares: Square[] = [];
-        for (const offset of offsets) {
-            squares = squares.concat(this.squaresReachableInDirection(offset));
-        }
-        return squares;
-    }
-
-    public getDiagonalSquares() {
-        const offsets : Offset[] = [
-            Offset.northeast(),
-            Offset.southeast(),
-            Offset.northwest(),
-            Offset.southwest(),
-        ]
-        let squares: Square[] = [];
-        for (const offset of offsets) {
-            squares = squares.concat(this.squaresReachableInDirection(offset));
-        }
-        return squares;
-    }
 
 
     public toString() {
