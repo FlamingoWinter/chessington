@@ -10,7 +10,6 @@ export default class King extends Piece {
 
     public getAvailableMoves(board: Board) {
         const currentSquare = board.findPiece(this);
-        let moves = [];
         let offsets = [
             Offset.north(),
             Offset.south(),
@@ -22,13 +21,7 @@ export default class King extends Piece {
             Offset.southwest()
 
         ]
-        for(const offset of offsets){
-            const newSquare = board.offsetSquareAndCheckBounds(currentSquare,offset);
-            if (newSquare) {
-                moves.push(newSquare);
-            }
-        }
 
-        return moves;
+        return board.squaresReachableWithOffsets(currentSquare, offsets)
     }
 }

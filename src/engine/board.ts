@@ -63,7 +63,7 @@ export default class Board {
         return null;
     }
 
-    enemyPieceIsOn(square : Square):boolean {
+    public enemyPieceIsOn(square : Square):boolean {
         return this.getPiece(square)?.player != this.currentPlayer;
     }
 
@@ -108,6 +108,24 @@ export default class Board {
         let squares: Square[] = [];
         for (const offset of offsets) {
             squares = squares.concat(this.squaresReachableInDirection(square, offset));
+        }
+        return squares;
+    }
+
+    public squaresReachableWithOffsets(square: Square, offsets: Offset[]): Square[] {
+        let squares: Square[] = [];
+        for (let offset of offsets){
+            const newSquare = this.offsetSquareAndCheckBounds(square, offset);
+            if (newSquare) {
+                if(this.getPiece(newSquare)){
+                    if(this.enemyPieceIsOn(newSquare) && !(this.getPiece(newSquare) instanceof King)) {
+                        squares.push(newSquare);
+                    }
+                }
+                else{
+                    squares.push(newSquare);
+                }
+            }
         }
         return squares;
     }
