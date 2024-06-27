@@ -1,3 +1,4 @@
+
 export default class Square {
     public row: number;
     public col: number;
@@ -13,6 +14,17 @@ export default class Square {
 
     public equals(otherSquare: Square) {
         return !!otherSquare && this.row === otherSquare.row && this.col === otherSquare.col;
+    }
+
+    public getSquaresInRankAndFile() {
+        let squares = [];
+        for (let i = 0; i < 8; i++) {
+            squares.push(new Square(i, this.col));
+            squares.push(new Square(this.row, i));
+        }
+        // Remove piece position from moves
+        squares = squares.filter((square) => (square.row != this.row) || (square.col != this.col));
+        return squares;
     }
 
     public toString() {
