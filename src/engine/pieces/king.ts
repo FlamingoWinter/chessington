@@ -23,9 +23,9 @@ export default class King extends Piece {
 
         ]
         for(const offset of offsets){
-            const newSquare = currentSquare.squareAtOffset(offset);
+            const newSquare = board.offsetSquareAndCheckBounds(currentSquare,offset);
             if (newSquare) {
-                moves.push(currentSquare.squareAtOffset(offset));
+                moves.push(newSquare);
             }
         }
 

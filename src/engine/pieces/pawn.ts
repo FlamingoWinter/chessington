@@ -16,11 +16,11 @@ export default class Pawn extends Piece {
         const direction = this.player === player.BLACK ? -1 : 1;
         let moves:Square[] = [];
 
-        const oneForward = currentSquare.squareAtOffset(new Offset(0,direction))
+        const oneForward = board.offsetSquareAndCheckBounds(currentSquare, new Offset(0,direction))
         if(oneForward && !board.getPiece(oneForward)){
             moves.push(oneForward);
             if (this.firstMove) {
-                const twoForward = currentSquare.squareAtOffset(new Offset(0,2*direction));
+                const twoForward = board.offsetSquareAndCheckBounds(currentSquare, new Offset(0,2*direction));
                 if(twoForward && !board.getPiece(twoForward)){
                     moves.push(twoForward);
                 }

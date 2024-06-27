@@ -14,13 +14,9 @@ export default class Square {
         return new Square(row, col);
     }
 
-    public squareAtOffset(offset : Offset){
+    public offset(offset : Offset){
         const {x, y} = offset;
-        const newSquare = new Square(this.row + y, this.col + x);
-        if(newSquare.inBounds()){
-            return newSquare;
-        }
-        return undefined;
+        return new Square(this.row + y, this.col + x);
     }
     
 
@@ -33,9 +29,7 @@ export default class Square {
         return !this.equals(otherSquare);
     }
 
-    public inBounds() {
-        return this.row < gameSettings.BOARD_SIZE && this.col < gameSettings.BOARD_SIZE && this.row >= 0 && this.col >= 0
-    }
+
 
 
 

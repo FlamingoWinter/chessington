@@ -2,6 +2,7 @@ import Piece from './piece';
 import Player from '../player';
 import Board from '../board';
 import Offset from "../offset";
+import King from "./king";
 
 export default class Knight extends Piece {
     public constructor(player: Player) {
@@ -23,11 +24,20 @@ export default class Knight extends Piece {
             new Offset(-1,-2),
         ]
         for(let offset of offsets){
-            const newSquare = currentSquare.squareAtOffset(offset);
+            const newSquare = board.offsetSquareAndCheckBounds(currentSquare, offset);
             if (newSquare) {
-                moves.push(currentSquare.squareAtOffset(offset));
+                if(board.getPiece(newSquare)){
+                    if(board.enemyPieceIsOn(newSquare))
+                    {
+                        if (!(board.getPiece(newSquare) instanceof King)) {
+                            moves.push(newSquare);
+                        }
+                    }
+                }
+                else{
+                    moves.push(newSquare);
+                }
             }
-
         }
 
         return moves;

@@ -4,6 +4,7 @@ import Square from './square';
 import Piece from './pieces/piece';
 import Offset from "./offset";
 import King from "./pieces/king";
+import gameSettings from "./gameSettings";
 
 export default class Board {
     public currentPlayer: Player;
@@ -50,16 +51,28 @@ export default class Board {
         return board;
     }
 
-    private enemyPieceIsOn(square : Square):boolean {
+    private inBounds(square:Square) {
+        return square.row < gameSettings.BOARD_SIZE && square.col < gameSettings.BOARD_SIZE && square.row >= 0 && square.col >= 0
+    }
+
+    public offsetSquareAndCheckBounds(square:Square, offset:Offset):Square | null{
+        const offsetSquare = square.offset(offset);
+        if(this.inBounds(offsetSquare)){
+            return offsetSquare;
+        }
+        return null;
+    }
+
+    enemyPieceIsOn(square : Square):boolean {
         return this.getPiece(square)?.player != this.currentPlayer;
     }
 
-    public squaresReachableInDirection(square: Square, direction : Offset){
+    public squaresReachableInDirection(square: Square, offset : Offset){
         let squares:Square[] = [];
-        let nextSquare = square.squareAtOffset(direction);
+        let nextSquare = this.offsetSquareAndCheckBounds(square,offset);
         while(nextSquare && !this.getPiece(nextSquare)){
             squares.push(nextSquare);
-            nextSquare = nextSquare.squareAtOffset(direction);
+            nextSquare = this.offsetSquareAndCheckBounds(nextSquare,offset);
         }
 
         if(nextSquare && this.enemyPieceIsOn(nextSquare)){
