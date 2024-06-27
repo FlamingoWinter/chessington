@@ -4,6 +4,7 @@ import Board from '../board';
 import Square from "../square";
 import player from "../player";
 import Offset from "../offset";
+import King from "./king";
 
 export default class Pawn extends Piece {
 
@@ -26,6 +27,20 @@ export default class Pawn extends Piece {
                 }
             }
         }
+
+        const diagonalEast = board.offsetSquareAndCheckBounds(currentSquare, new Offset(1,direction));
+        const diagonalWest = board.offsetSquareAndCheckBounds(currentSquare, new Offset(-1,direction));
+
+        for (let captureSquare of [diagonalEast, diagonalWest]) {
+            if(captureSquare){
+                if(board.getPiece(captureSquare)){
+                    if(board.enemyPieceIsOn(captureSquare) && !(board.getPiece(captureSquare) instanceof King)) {
+                        moves.push(captureSquare);
+                    }
+                }
+            }
+        }
+
 
         return moves;
     }
