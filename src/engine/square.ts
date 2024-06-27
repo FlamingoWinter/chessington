@@ -1,6 +1,5 @@
 import gameSettings from "./gameSettings";
 import Offset from "./offset";
-import Board from "./board";
 
 export default class Square {
     public row: number;
