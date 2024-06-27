@@ -2,7 +2,6 @@ import Piece from './piece';
 import Player from '../player';
 import Board from '../board';
 import Offset from "../offset";
-import King from "./king";
 
 export default class Knight extends Piece {
     public constructor(player: Player) {
