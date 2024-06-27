@@ -1,4 +1,5 @@
 import gameSettings from "./gameSettings";
+import Offset from "./offset";
 
 export default class Square {
     public row: number;
@@ -11,6 +12,25 @@ export default class Square {
 
     public static at(row: number, col: number) {
         return new Square(row, col);
+    }
+
+    public squareAtOffset(offset : Offset){
+        const {x, y} = offset;
+        const newSquare = new Square(this.row + y, this.col + x);
+        if(newSquare.inBounds()){
+            return newSquare;
+        }
+        return null;
+    }
+    
+    public squaresReachableInDirection(direction : Offset){
+        let squares:Square[] = [];
+        let nextSquare = this.squareAtOffset(direction);
+        while(nextSquare){
+            squares.push(nextSquare);
+            nextSquare = nextSquare.squareAtOffset(direction);
+        }
+        return squares;
     }
 
     public equals(otherSquare: Square) {
@@ -26,25 +46,30 @@ export default class Square {
     }
 
     public getSquaresInRankAndFile() {
-        let squares = [];
-        for (let i = 0; i < gameSettings.BOARD_SIZE; i++) {
-            squares.push(new Square(i, this.col));
-            squares.push(new Square(this.row, i));
+        const offsets : Offset[] = [
+            Offset.north(),
+            Offset.south(),
+            Offset.east(),
+            Offset.west(),
+        ]
+        let squares: Square[] = [];
+        for (const offset of offsets) {
+            squares = squares.concat(this.squaresReachableInDirection(offset));
         }
-        // Remove piece position from moves
-        squares = squares.filter((square) => (square.row != this.row) || (square.col != this.col));
         return squares;
     }
 
     public getDiagonalSquares() {
-        let squares = [];
-        for (let i = -gameSettings.BOARD_SIZE; i < gameSettings.BOARD_SIZE; i++) {
-            squares.push(new Square(this.row + i, this.col + i));
-            squares.push(new Square(this.row + i, this.col - i));
+        const offsets : Offset[] = [
+            Offset.northeast(),
+            Offset.southeast(),
+            Offset.northwest(),
+            Offset.southwest(),
+        ]
+        let squares: Square[] = [];
+        for (const offset of offsets) {
+            squares = squares.concat(this.squaresReachableInDirection(offset));
         }
-
-        squares = squares.filter((square) => square.inBounds());
-        squares = squares.filter((square) => this.notEquals(square));
         return squares;
     }
 

@@ -2,6 +2,7 @@ import Piece from './piece';
 import Player from '../player';
 import Board from '../board';
 import Square from "../square";
+import Offset from "../offset";
 
 export default class Knight extends Piece {
     public constructor(player: Player) {
@@ -12,17 +13,19 @@ export default class Knight extends Piece {
     public getAvailableMoves(board: Board) {
         const currentSquare = board.findPiece(this);
         let moves = [];
-
-        moves.push(new Square(currentSquare.row + 2, currentSquare.col + 1));
-        moves.push(new Square(currentSquare.row + 2, currentSquare.col - 1));
-        moves.push(new Square(currentSquare.row - 2, currentSquare.col + 1));
-        moves.push(new Square(currentSquare.row - 2, currentSquare.col - 1));
-        moves.push(new Square(currentSquare.row + 1, currentSquare.col + 2));
-        moves.push(new Square(currentSquare.row + 1, currentSquare.col - 2));
-        moves.push(new Square(currentSquare.row - 1, currentSquare.col + 2));
-        moves.push(new Square(currentSquare.row - 1, currentSquare.col - 2));
-
-        moves = moves.filter((square) => square.inBounds);
+        let directions = [
+            new Offset(2,1),
+            new Offset(1,2),
+            new Offset(-2,1),
+            new Offset(-1,2),
+            new Offset(2,-1),
+            new Offset(1,-2),
+            new Offset(-2,-1),
+            new Offset(-1,-2),
+        ]
+        for(const direction of directions){
+            moves.push(currentSquare.squareAtOffset(direction));
+        }
 
         return moves;
     }

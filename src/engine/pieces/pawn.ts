@@ -3,6 +3,7 @@ import Player from '../player';
 import Board from '../board';
 import Square from "../square";
 import player from "../player";
+import Offset from "../offset";
 
 export default class Pawn extends Piece {
 
@@ -14,10 +15,19 @@ export default class Pawn extends Piece {
         const currentSquare = board.findPiece(this);
         const direction = this.player === player.BLACK ? -1 : 1;
         let moves:Square[] = [];
-        moves.push(new Square(currentSquare.row + direction, currentSquare.col));
-        if (this.firstMove) {
-            moves.push(new Square(currentSquare.row + direction * 2, currentSquare.col));
+
+        const oneForward = currentSquare.squareAtOffset(new Offset(0,direction))
+        if(oneForward){
+            moves.push(oneForward);
         }
+
+        if (this.firstMove) {
+            const twoForward = currentSquare.squareAtOffset(new Offset(0,2*direction));
+            if(twoForward){
+                moves.push(twoForward);
+            }
+        }
+
         return moves;
     }
 
