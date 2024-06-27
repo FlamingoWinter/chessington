@@ -1,7 +1,6 @@
 import Piece from './piece';
 import Player from '../player';
 import Board from '../board';
-import Square from "../square";
 import Offset from "../offset";
 
 export default class Knight extends Piece {
